@@ -112,7 +112,7 @@ def analyze_leaf(image_path, reference_length_mm, reference_pixels):
         result_img = img.copy()
         cv2.drawContours(result_img, [leaf_contour], -1, (0, 255, 0), 2)
         box = cv2.boxPoints(rect)
-        box = np.int0(box)
+        box = box.astype(np.int32)  # Changed from np.int0 to np.int32
         cv2.drawContours(result_img, [box], -1, (0, 0, 255), 2)
         
         # Save result image
