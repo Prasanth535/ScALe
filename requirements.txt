@@ -1,15 +1,21 @@
-# Core Flask Stack
+# Core Flask requirements
 Flask==2.3.2
-gunicorn==20.1.0
-Werkzeug==2.3.6  # Downgraded for compatibility
-Jinja2==3.1.6
-itsdangerous==2.2.0
-click==8.1.8
+Werkzeug==3.0.1  # Pinned to match Flask 2.3.2 compatibility
+Jinja2==3.1.3
+itsdangerous==2.1.2
+click==8.1.7
 
-# Image Processing
+# Image processing
 opencv-python-headless==4.7.0.72
 numpy==1.24.3
+Pillow==10.1.0  # Essential for image processing
 
-# Minimal Required Dependencies
-python-dateutil==2.9.0.post0
-MarkupSafe==2.1.5
+# Web server
+gunicorn==20.1.0
+
+# Optional (only include if you need them)
+# pandas==2.2.3  # Only if doing data analysis
+# matplotlib==3.8.2  # Only if generating charts
+
+# Development tools (remove in production)
+blinker==1.7.0  # For Flask signals
