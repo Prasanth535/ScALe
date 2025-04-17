@@ -252,6 +252,73 @@ footer a:hover {
   text-indent: -1.5rem;
 }
 
+/* Leaf Calculator Specific Styles */
+.leaf-results {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: #e8f5e9;
+  border-left: 5px solid #388e3c;
+  border-radius: 8px;
+}
+
+.leaf-image-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  margin: 1.5rem 0;
+}
+
+.leaf-image-box {
+  flex: 1;
+  min-width: 300px;
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+
+.leaf-image-box img {
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+.leaf-image-box h4 {
+  color: #00796b;
+  margin: 0.5rem 0 1rem;
+  text-align: center;
+}
+
+.leaf-measurements {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.leaf-measurement-card {
+  flex: 1;
+  min-width: 200px;
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.leaf-measurement-card h4 {
+  color: #00796b;
+  margin-bottom: 0.5rem;
+}
+
+.leaf-measurement-card p {
+  margin: 0.25rem 0;
+  color: #333;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .container, .upload-form {
@@ -271,5 +338,13 @@ footer a:hover {
   
   .tool-card {
     width: 100%;
+  }
+
+  .leaf-image-box {
+    min-width: 100%;
+  }
+
+  .leaf-measurement-card {
+    min-width: 150px;
   }
 }
