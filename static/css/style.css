@@ -1,0 +1,275 @@
+/* General Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  background-color: #f4f7f9;
+  color: #333;
+  padding: 0 1rem;
+}
+
+/* Header Styles */
+header {
+  background-color: #004d66;
+  color: white;
+  padding: 1.5rem;
+  text-align: center;
+  border-radius: 0 0 10px 10px;
+}
+
+header .title {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.tagline {
+  font-size: 1.2rem;
+  margin-top: 0.5rem;
+  font-style: italic;
+  color: #e0f7fa;
+}
+
+nav {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  margin: 0 1rem;
+  font-weight: bold;
+  padding: 0.5rem;
+}
+
+nav a:hover {
+  text-decoration: underline;
+  background-color: #006080;
+  border-radius: 5px;
+}
+
+/* Main Content Area */
+main {
+  padding: 2rem 1rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* Footer Styles */
+footer {
+  text-align: center;
+  background-color: #004d66;
+  color: white;
+  padding: 1rem;
+  margin-top: 2rem;
+  border-radius: 10px 10px 0 0;
+}
+
+footer a {
+  color: #e0f7fa;
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* Home Page */
+.home-content h2,
+.about-section h2,
+.counter-section h2,
+.calculator-section h2 {
+  color: #00796b;
+  margin-bottom: 1rem;
+}
+
+.intro-section p.highlight {
+  background-color: #e0f2f1;
+  border-left: 5px solid #00796b;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  border-radius: 5px;
+}
+
+.tools-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.tool-card {
+  background: white;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  width: 300px;
+  text-align: center;
+}
+
+.tool-card h3 {
+  color: #00796b;
+  margin-bottom: 1rem;
+}
+
+.animation-container {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.animation-container img {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+.caption {
+  font-style: italic;
+  margin-top: 0.5rem;
+}
+
+/* About Page */
+.about-section ul,
+.about-section ol {
+  margin: 1rem 0 2rem 1.5rem;
+}
+
+.about-section li {
+  margin-bottom: 0.5rem;
+}
+
+.link-section {
+  text-align: center;
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.button-link {
+  background-color: #00796b;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.button-link:hover {
+  background-color: #004d40;
+}
+
+/* Counter and Calculator Pages */
+.upload-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+
+.upload-form label {
+  font-weight: bold;
+}
+
+.upload-form input,
+.upload-form select,
+.upload-form button {
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.upload-form button {
+  background-color: #00796b;
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.upload-form button:hover {
+  background-color: #004d40;
+}
+
+.result-section {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: #e8f5e9;
+  border-left: 5px solid #388e3c;
+  border-radius: 8px;
+}
+
+.result-image {
+  max-width: 100%;
+  margin-top: 1rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.error {
+  color: #d32f2f;
+  font-weight: bold;
+  margin: 1rem 0;
+  padding: 0.5rem;
+  background-color: #ffebee;
+  border-left: 5px solid #d32f2f;
+  border-radius: 5px;
+}
+
+.error-messages {
+  margin: 1rem 0;
+}
+
+/* Notes Sections */
+.notes-section {
+  background-color: #e3f2fd;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  border-left: 5px solid #1976d2;
+}
+
+.notes-list {
+  list-style-type: none;
+}
+
+.notes-list li {
+  margin-bottom: 0.5rem;
+  padding-left: 1.5rem;
+  text-indent: -1.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container, .upload-form {
+    width: 90%;
+    padding: 1rem;
+  }
+  
+  nav a {
+    margin: 0 0.5rem;
+    padding: 0.3rem;
+  }
+  
+  .tools-section {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .tool-card {
+    width: 100%;
+  }
+}

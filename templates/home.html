@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Home - ScALe{% endblock %}
+
+{% block content %}
+<section class="home-content">
+  <div class="intro-section">
+    <h2>Welcome to ScALe</h2>
+    <p class="highlight">
+      ScALe (Seed Counter And Leaf Evaluator) provides researchers with precise agricultural measurement tools. 
+      Our advanced image processing delivers accurate seed counts and leaf measurements in seconds. 
+      Designed for scientists, agronomists, and plant researchers who demand reliability and efficiency.
+    </p>
+  </div>
+
+  <div class="tools-section">
+    <div class="tool-card">
+      <h3>Seed Counter</h3>
+      <p>Automated counting of rice, maize, or millet seeds from your images.</p>
+      <a href="{{ url_for('seedcounter') }}" class="button-link">Try Seed Counter</a>
+    </div>
+    
+    <div class="tool-card">
+      <h3>Leaf Evaluator</h3>
+      <p>Comprehensive leaf analysis including area, length, and width measurements.</p>
+      <a href="{{ url_for('leafcalculator') }}" class="button-link">Try Leaf Evaluator</a>
+    </div>
+  </div>
+
+  <div class="animation-section">
+    <h3>How It Works</h3>
+    <div class="animation-container">
+      <img src="{{ url_for('static', filename='animations/seed_animation.gif') }}" alt="Process animation">
+      <p class="caption"> Select tool → Upload your image → Get instant results!</p>
+    </div>
+  </div>
+</section>
+{% endblock %}
