@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Seed Counter - ScALe{% endblock %}
+
+{% block content %}
+<section class="counter-section">
+  <h2>Seed Counter</h2>
+  
+  <div class="notes-section">
+    <h3>Important Notes on Image Capture:</h3>
+    <ul class="notes-list">
+      <li>📸 Capture the image of the seeds on a white background.</li>
+      <li>⚠️ Ensure seeds maintain some distance from each other for accurate counting.</li>
+      <li>☀️ Avoid shadows while capturing the image.</li>
+      <li>📱 Use a document scanner app for better clarity.</li>
+    </ul>
+  </div>
+
+  <form method="POST" enctype="multipart/form-data" class="upload-form">
+    <label for="seed_type">Select Seed Type:</label>
+    <select name="seed_type" id="seed_type" required>
+      <option value="rice">Rice</option>
+      <option value="maize">Maize</option>
+      <option value="millet">Millet</option>
+    </select>
+
+    <label for="file">Upload Seed Image:</label>
+    <input type="file" name="file" id="file" accept="image/*" required>
+
+    <button type="submit">Count Seeds</button>
+  </form>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="error-messages">
+        {% for message in messages %}
+          <p class="error">{{ message }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  {% if seed_count is not none %}
+    <div class="result-section">
+      <h3>Seed Count Result</h3>
+      <p><strong>Seed Type:</strong> {{ seed_type }}</p>
+      <p><strong>Total Seeds Counted:</strong> {{ seed_count }}</p>
+      {% if image_path %}
+        <img src="{{ url_for('static', filename=image_path.split('static/')[-1]) }}" alt="Uploaded Seed Image" class="result-image">
+      {% endif %}
+    </div>
+  {% endif %}
+</section>
+{% endblock %}
