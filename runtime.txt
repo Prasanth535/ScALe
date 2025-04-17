@@ -1,2 +1,0 @@
-rm runtime.txt
-echo "3.10" > .python-version
