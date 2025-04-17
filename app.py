@@ -67,57 +67,106 @@ def seedcounter():
 
     return render_template("seedcounter.html", seed_count=seed_count, seed_type=seed_type, image_path=image_path)
 
+def analyze_leaf(image_path, reference_length_mm, reference_pixels):
+    """Core leaf analysis function"""
+    try:
+        img = cv2.imread(image_path)
+        if img is None:
+            return None, "Image not loaded"
+        
+        # Convert to HSV color space
+        hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+        
+        # Create green color mask (adjust these values as needed)
+        lower_green = np.array([25, 40, 40])
+        upper_green = np.array([90, 255, 255])
+        mask = cv2.inRange(hsv, lower_green, upper_green)
+        
+        # Morphological operations
+        kernel = np.ones((5,5), np.uint8)
+        mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
+        mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
+        
+        # Find contours
+        contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        if not contours:
+            return None, "No leaf detected"
+            
+        # Get largest contour
+        leaf_contour = max(contours, key=cv2.contourArea)
+        
+        # Calculate pixel-to-mm ratio
+        px_to_mm = reference_length_mm / reference_pixels
+        
+        # Calculate area
+        area_px = cv2.contourArea(leaf_contour)
+        area_mm2 = area_px * (px_to_mm ** 2)
+        
+        # Get rotated rectangle dimensions
+        rect = cv2.minAreaRect(leaf_contour)
+        (_, _), (width_px, height_px), _ = rect
+        length_mm = max(width_px, height_px) * px_to_mm
+        width_mm = min(width_px, height_px) * px_to_mm
+        
+        # Create result visualization
+        result_img = img.copy()
+        cv2.drawContours(result_img, [leaf_contour], -1, (0, 255, 0), 2)
+        box = cv2.boxPoints(rect)
+        box = np.int0(box)
+        cv2.drawContours(result_img, [box], -1, (0, 0, 255), 2)
+        
+        # Save result image
+        result_filename = 'result_' + os.path.basename(image_path)
+        result_path = os.path.join(app.config['UPLOAD_FOLDER'], result_filename)
+        cv2.imwrite(result_path, result_img)
+        
+        return {
+            'area_mm2': round(area_mm2, 2),
+            'area_cm2': round(area_mm2/100, 2),
+            'length_mm': round(length_mm, 2),
+            'length_cm': round(length_mm/10, 2),
+            'width_mm': round(width_mm, 2),
+            'width_cm': round(width_mm/10, 2),
+            'result_image': result_filename,
+            'px_to_mm': round(px_to_mm, 4)
+        }, None
+        
+    except Exception as e:
+        return None, str(e)
+
 @app.route("/leafcalculator", methods=['GET', 'POST'])
 def leafcalculator():
-    area = None
-    length = None
-    width = None
-    image_path = None
-    error = None
-
     if request.method == 'POST':
         file = request.files.get('leaf_image')
-        reference_length_cm = float(request.form.get('reference_length_cm', 0))
-        reference_pixel_length = float(request.form.get('reference_pixel_length', 0))
-
+        try:
+            ref_length = float(request.form.get('reference_length_cm', 15)) * 10  # Convert cm to mm
+            ref_pixels = float(request.form.get('reference_pixel_length', 500))
+        except:
+            return render_template("leafcalculator.html", 
+                                error="Invalid reference values. Please enter numbers.")
+        
         if not file or file.filename == '':
-            error = "No file uploaded."
-        elif not allowed_file(file.filename):
-            error = "File type not allowed. Please upload a PNG, JPG or JPEG image."
-        else:
-            filename = secure_filename(file.filename)
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(file_path)
-            image_path = file_path
-
-            try:
-                area, length, width = calculate_leaf_properties(file_path, reference_length_cm, reference_pixel_length)
-                if area is None:
-                    error = "Leaf detection failed. Try another image."
-            except Exception as e:
-                error = f"Error processing image: {str(e)}"
-
-    return render_template("leafcalculator.html", area=area, length=length, width=width, image_path=image_path, error=error)
-
-def calculate_leaf_properties(image_path, reference_length_cm, reference_pixel_length):
-    image = cv2.imread(image_path)
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    _, thresh = cv2.threshold(gray, 100, 255, cv2.THRESH_BINARY_INV)
-    contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            return render_template("leafcalculator.html", error="No file uploaded.")
+            
+        if not allowed_file(file.filename):
+            return render_template("leafcalculator.html", error="File type not allowed. Please upload a PNG, JPG or JPEG image.")
+            
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(filepath)
+        
+        results, error = analyze_leaf(filepath, ref_length, ref_pixels)
+        
+        if error:
+            return render_template("leafcalculator.html", error=error)
+            
+        return render_template("leafcalculator.html", 
+                            results=results, 
+                            original_image=filename,
+                            reference_length_cm=ref_length/10,
+                            reference_pixel_length=ref_pixels)
     
-    if not contours:
-        return None, None, None
-    
-    leaf_contour = max(contours, key=cv2.contourArea)
-    leaf_area_pixels = cv2.contourArea(leaf_contour)
-    pixel_to_cm_ratio = (reference_length_cm / reference_pixel_length) ** 2
-    leaf_area_cm2 = leaf_area_pixels * pixel_to_cm_ratio
-    
-    x, y, width_pixels, height_pixels = cv2.boundingRect(leaf_contour)
-    leaf_length_cm = height_pixels * (reference_length_cm / reference_pixel_length)
-    leaf_width_cm = width_pixels * (reference_length_cm / reference_pixel_length)
-    
-    return leaf_area_cm2, leaf_length_cm, leaf_width_cm
+    return render_template("leafcalculator.html")
 
 if __name__ == "__main__":
     app.run(debug=True)
